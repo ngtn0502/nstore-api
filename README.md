@@ -8,6 +8,8 @@ Technologies used
 
 - ASP.NET Core
 
+- SQL Server
+
 - Entity framework
 
 - Code first
