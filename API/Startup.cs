@@ -1,59 +1,63 @@
-using Core.Interfaces;
+using API.Extensions;
+using API.Helpers;
+using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 
 namespace API
 {
-    public class Startup
-    {
-        private readonly IConfiguration _configuration;
-        public Startup(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+   public class Startup
+   {
+      private readonly IConfiguration _configuration;
+      public Startup(IConfiguration configuration)
+      {
+         _configuration = configuration;
+      }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddScoped<IProductRepository, ProductRepository>();
-            // We add our GenericRepository to startup.cs to make it available for other class to use
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-            services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
-        }
+      // This method gets called by the runtime. Use this method to add services to the container.
+      public void ConfigureServices(IServiceCollection services)
+      {
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-            }
+         // Add auto mapper as a service
+         services.AddAutoMapper(typeof(MappingProfile));
+         services.AddControllers();
 
-            app.UseHttpsRedirection();
+         // Add our own application services extensions (includes Repository, GenericRepository, Services for configuring error)
+         services.AddApplicationServices();
+         // Add our own swagger services extention
+         services.AddSwaggerDocumentation();
 
-            app.UseRouting();
+         services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+      }
 
-            app.UseAuthorization();
+      // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+      {
+         app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
+         // Add our own swagger app extension
+         app.UseSwaggerDocumentation();
+
+         // If no end point controller match it will go redirect to error page
+         app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+         app.UseHttpsRedirection();
+
+         app.UseRouting();
+
+         app.UseStaticFiles();
+
+         app.UseAuthorization();
+
+         app.UseEndpoints(endpoints =>
+         {
+            endpoints.MapControllers();
+         });
+      }
+   }
 }
