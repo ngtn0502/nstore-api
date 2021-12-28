@@ -1,19 +1,23 @@
 # nstore-api
 
-.NET Core 5.0 API
+> An API for eCommerce sites 
 
-ASP.NET Core
+Technologies used
 
-Entity framework
+- .NET Core 5.0 API
 
-Code first
+- ASP.NET Core
 
-Repository pattern
+- Entity framework
 
-Generic Repository
+- Code first
 
-Specification pattern
+- Repository pattern
 
-Unit of work pattern
+- Generic repository pattern
 
-AutoMapper
+- Specification pattern
+
+- Unit of work pattern
+
+- AutoMapper
