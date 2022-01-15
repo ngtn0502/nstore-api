@@ -1,0 +1,24 @@
+<div class="card shadow-sm product-item">
+  <div class="product-item__pic">
+    <img [src]="product.pictureUrl" alt="" />
+  </div>
+  <div class="card-body">
+    <h5>{{ product.name }}</h5>
+    <p>
+      {{ product.productBrand }}
+    </p>
+    <p>{{ product.price }}$</p>
+    <div
+      class="d-flex justify-content-center align-items-center product-item__btn"
+    >
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-outline-secondary mr-2">
+          View
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

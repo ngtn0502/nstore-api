@@ -1,0 +1,13 @@
+<div class="filter-widget mt-3">
+  <h4 class="fw-title">By {{ type }}</h4>
+  <ul class="list-group">
+    <li
+      class="list-group-item"
+      *ngFor="let item of items"
+      [class.active]="item.id === selectedItem"
+      (click)="filterByCategory(item.id)"
+    >
+      {{ item.name }}
+    </li>
+  </ul>
+</div>

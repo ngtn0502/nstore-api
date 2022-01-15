@@ -1,0 +1,18 @@
+.product-item {
+  padding: 0.5rem;
+  height: 30rem;
+  margin-bottom: 1rem;
+  &__pic {
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.btn-group {
+  width: 100%;
+  button {
+    width: 50%;
+  }
+}
