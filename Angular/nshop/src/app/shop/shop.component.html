@@ -1,0 +1,46 @@
+<div class="row">
+  <div
+    class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter"
+  >
+    <div class="filter-widget">
+      <h4 class="fw-title">Sort</h4>
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Price: Hight to Low</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <app-product-filter
+      [items]="brands$ | async"
+      [type]="'brands'"
+      (filterProduct)="setProductFilter($event)"
+    ></app-product-filter>
+
+    <app-product-filter
+      [items]="types$ | async"
+      [type]="'types'"
+      (filterProduct)="setProductFilter($event)"
+    ></app-product-filter>
+  </div>
+
+  <div class="col-lg-9 order-1 order-lg-2">
+    <div class="product-show-option">
+      <div class="row">
+        <div class="col-lg-5 col-md-5">
+          <p>Show <strong>09</strong> Of <strong>36</strong> Product</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-list">
+      <div class="row mb-3">
+        <div
+          class="col-lg-4 col-sm-6 product-container"
+          *ngFor="let product of products$ | async"
+        >
+          <app-product-item [product]="product"></app-product-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
