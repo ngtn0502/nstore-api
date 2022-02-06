@@ -1,0 +1,15 @@
+<header>
+  <span *ngIf="totalItems && totalItems !== 0">
+    Show
+    <strong
+      >{{ shopParams.pageSize * (shopParams.pageNumber - 1) + 1 }} -
+      {{
+        shopParams.pageSize * shopParams.pageNumber > totalItems
+          ? totalItems
+          : shopParams.pageSize * shopParams.pageNumber
+      }}</strong
+    >
+    Of <strong>{{ totalItems }}</strong> Product
+  </span>
+  <span *ngIf="totalItems === 0"> There is no products meet your need. </span>
+</header>

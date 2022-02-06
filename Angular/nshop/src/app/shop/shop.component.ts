@@ -5,7 +5,8 @@ import { IProduct } from '../shared/models/product';
 import { IPagination } from '../shared/models/pagination';
 import { IBrand } from './../shared/models/brand';
 import { IType } from './../shared/models/type';
-import { HttpResponse } from '@angular/common/http';
+import { ShopParams } from '../shared/models/shopParams';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-shop',
@@ -13,12 +14,16 @@ import { HttpResponse } from '@angular/common/http';
   styleUrls: ['./shop.component.scss'],
 })
 export class ShopComponent implements OnInit {
-  public products$: Observable<IPagination | null>;
+  public products$: Observable<IProduct[]>;
   public brands$: Observable<IBrand[]>;
   public types$: Observable<IType[]>;
-
-  private brandId: number;
-  private typeId: number;
+  public sortOptions = [
+    { name: 'Alphabetical', value: 'default' },
+    { name: 'Price: High to Low', value: 'priceDesc' },
+    { name: 'Price: Low to High', value: 'priceAsc' },
+  ];
+  public shopParams: ShopParams = new ShopParams();
+  public totalItems: number;
 
   constructor(private shopService: ShopService) {
     this.brands$ = this.shopService.getBrands();
@@ -29,22 +34,46 @@ export class ShopComponent implements OnInit {
   ngOnInit() {}
 
   getProductData() {
-    this.products$ = this.shopService
-      .getProducts(this.brandId, this.typeId)
-      .pipe(
-        map((response: HttpResponse<IPagination>) => {
-          return response.body;
-        })
-      );
+    console.log(this.shopParams);
+
+    this.products$ = this.shopService.getProducts(this.shopParams).pipe(
+      map((response: IPagination) => {
+        this.totalItems = response.totalCount;
+        this.shopParams.pageNumber = response.pageNumber;
+        this.shopParams.pageSize = response.pageSize;
+        return response.data;
+      })
+    );
   }
 
-  setProductFilter($event: { id: number; type: string }) {
+  onProductFilter($event: { id: number; type: string }) {
     const { id, type } = $event;
     if (type === 'brands') {
-      this.brandId = id;
+      this.shopParams.brandId = id;
     } else {
-      this.typeId = id;
+      this.shopParams.typeId = id;
     }
+    this.shopParams.pageNumber = 1;
+    this.getProductData();
+  }
+
+  onProductSort(value: string) {
+    this.shopParams.sort = value;
+    this.getProductData();
+  }
+
+  onPageChange(event: PageChangedEvent) {
+    if (event.page === this.shopParams.pageNumber) return;
+    this.shopParams.pageNumber = event.page;
+    this.getProductData();
+  }
+
+  onSearch() {
+    this.shopParams.pageNumber = 1;
+    this.getProductData();
+  }
+  onResetSearch() {
+    this.shopParams.search = '';
     this.getProductData();
   }
 }

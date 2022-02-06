@@ -1,0 +1,14 @@
+.product-detail {
+  &__pic {
+    height: 20rem;
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  &__buy {
+    cursor: pointer;
+    font-size: 2rem;
+  }
+}

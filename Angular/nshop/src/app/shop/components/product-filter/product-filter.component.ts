@@ -13,7 +13,7 @@ export class ProductFilterComponent implements OnInit {
 
   @Output() filterProduct = new EventEmitter<{ id: number; type: string }>();
   public name: string;
-  public selectedItem: number = 1;
+  public selectedItem: number = 0;
 
   constructor() {}
 

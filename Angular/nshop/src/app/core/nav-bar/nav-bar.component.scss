@@ -1,0 +1,19 @@
+.site-header {
+  background-color: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+a {
+  color: #999;
+  text-decoration: none;
+  transition: ease-in-out color 0.15s;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+
+  &.active {
+    color: white;
+  }
+}

@@ -1,0 +1,8 @@
+<ng-container *ngIf="error">
+  <h1>Internal Server Error! Kinda check your backend!</h1>
+  <p>{{ error.message }}</p>
+  <h2>Stack trace</h2>
+  <code>
+    {{ error.details }}
+  </code>
+</ng-container>
